@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Test03</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+
+    <string name="titre">Choice of character</string>
+    <string name="linuxName">Pro linux</string>
+    <string name="linuxDesc">The pro linux guy will torment his ennemis with his totally very complicated explication on why linux is the best</string>
+    <string name="pyjName">The little boy with mic</string>
+
+    <string name="pyjDesc">This boy will use his voice mixed with the poxer of a shitty microphone bought by his mother at walmart in order to make damage to the ears of his ennemies</string>
+
+
+</resources>

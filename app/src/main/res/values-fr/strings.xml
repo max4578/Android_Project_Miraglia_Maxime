@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Test03</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+
+    <string name="titre">Choix du personnage</string>
+    <string name="linuxName">Pro linux</string>
+    <string name="linuxDesc">Le pro linux utilise ces compétences et explication imcompréhensible pour tourmenter son adversaire</string>
+    <string name="pyjName">pyjama</string>
+    <string name="pyjDesc">Le  pyjama utilisera une combinaison mortelle de voix perçante et de microphone pourri acheter a 5 € par sa mère chez le pakistanais du coin pour infliger des dégats a l' ouie de ces ennemis</string>
+
+
+</resources>
