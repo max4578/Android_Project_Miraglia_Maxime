@@ -32,19 +32,19 @@ public class Ecran_Jeu extends AppCompatActivity {
     TableLayout tab,tabStat,tabPot;
 
    /*schéma de la map*/
-    private int table[][] = {
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-            {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-            {1,1,1,1,2,2,2,2,2,2,1,1,1,1,1},
-            {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+   private int table[][] = {
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
+           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
+           {1,1,1,1,2,2,2,2,2,2,1,1,1,1,1},
+           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
 
     /*Valeur permettant de gerer la zone de départ et le déplacement du personnage*/
     private int x;
@@ -259,15 +259,7 @@ public class Ecran_Jeu extends AppCompatActivity {
     }
 
     /*Met a jour le TL des potions*/
-     public void UpdatePot(){
 
-         tabPot.removeAllViews();
-         InitPot();
-         tabPot.addView(trPotForce);
-         tabPot.addView(trPotRouge);
-         tabPot.addView(trPotBleue);
-
-     }
 
     /*Methode qui generera la carte dans le TL*/
     public void UpdateMap(int res){

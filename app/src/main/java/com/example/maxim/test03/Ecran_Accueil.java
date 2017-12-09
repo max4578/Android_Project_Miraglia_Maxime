@@ -26,7 +26,7 @@ public class Ecran_Accueil extends AppCompatActivity {
         public void onClick(View v){
 
 
-            Intent intent = new Intent(Ecran_Accueil.this,Ecran_Personnage.class);
+            Intent intent = new Intent(Ecran_Accueil.this,LoginActivity.class);
             startActivity(intent);
         }
     };
