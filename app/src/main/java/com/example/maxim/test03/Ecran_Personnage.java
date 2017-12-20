@@ -13,18 +13,20 @@ public class Ecran_Personnage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ecran_personnage);
 
+        //Déclarations et initialisation des boutons
         Button btn = (Button)findViewById(R.id.continuer);
         c1=(CheckBox) findViewById(R.id.P1);
         c2=(CheckBox) findViewById(R.id.P2);
-
+        //Création des listener
         btn.setOnClickListener(entrer);
         c1.setOnClickListener(CB1);
         c2.setOnClickListener(CB2);
     }
 
 
+    //Choix perso 1
     private View.OnClickListener CB1= new View.OnClickListener()
     {
         @Override
@@ -35,6 +37,8 @@ public class Ecran_Personnage extends AppCompatActivity {
 
         }
     };
+
+    //Choix perso 2
     private View.OnClickListener CB2= new View.OnClickListener()
     {
         @Override
@@ -46,6 +50,7 @@ public class Ecran_Personnage extends AppCompatActivity {
         }
     };
 
+    //Entrez en jeu
     private View.OnClickListener entrer= new View.OnClickListener()
     {
         @Override
@@ -60,6 +65,7 @@ public class Ecran_Personnage extends AppCompatActivity {
                 intent.putExtra("Defense",42);
                 intent.putExtra("ressource",R.drawable.gnulinux);
                 intent.putExtra("NomClasse", "Pro Linux");
+                startActivity(intent);
             }
             else if(c2.isChecked()){
                 intent.putExtra("Force", 25);
@@ -68,9 +74,10 @@ public class Ecran_Personnage extends AppCompatActivity {
                 intent.putExtra("Defense",25);
                 intent.putExtra("ressource",R.drawable.hqdefault);
                 intent.putExtra("NomClasse", "pyjama");
+                startActivity(intent);
 
             }
-            startActivity(intent);
+
         }
     };
 }

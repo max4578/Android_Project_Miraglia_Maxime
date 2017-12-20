@@ -8,6 +8,30 @@
     <string name="linuxDesc">Le pro linux utilise ces compétences et explication imcompréhensible pour tourmenter son adversaire</string>
     <string name="pyjName">pyjama</string>
     <string name="pyjDesc">Le  pyjama utilisera une combinaison mortelle de voix perçante et de microphone pourri acheter a 5 € par sa mère chez le pakistanais du coin pour infliger des dégats a l' ouie de ces ennemis</string>
+    <string name="title_activity_login">Se connecter</string>
 
+    <string name="strp1">Force : 50</string>
+    <string name="magp1">Mana : 50</string>
+    <string name="viep1">PV : 16</string>
+    <string name="defp1">Defense : 42</string>
+
+    <string name="strp2">Force : 25</string>
+    <string name="magp2">Mana : 55</string>
+    <string name="viep2">PV : 25</string>
+    <string name="defp2">Defense : 45</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="str_stat">Force : </string>
+    <string name="mag_stat">Magie : </string>
+    <string name="vie_stat">Vie : </string>
+    <string name="def_stat">Defense : </string>
+
+    <string name="niveau">  Niveau : </string>
+    <string name="stat_window">Fenètre des stats</string>
+
+    <string name="lab">Labyrinthe</string>
+    <string name="enter_game">Entrer en jeu</string>
+    <string name="continuer">Continuer</string>
+    <string name="retour">Retour</string>
 
 </resources>

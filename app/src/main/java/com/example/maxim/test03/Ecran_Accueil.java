@@ -11,7 +11,7 @@ public class Ecran_Accueil extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.ecran_accueil);
 
 
 
@@ -26,7 +26,7 @@ public class Ecran_Accueil extends AppCompatActivity {
         public void onClick(View v){
 
 
-            Intent intent = new Intent(Ecran_Accueil.this,LoginActivity.class);
+            Intent intent = new Intent(Ecran_Accueil.this,Ecran_login.class);
             startActivity(intent);
         }
     };

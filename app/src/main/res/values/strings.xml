@@ -1,28 +1,33 @@
 <resources>
     <string name="app_name">Test03</string>
     <string name="title_activity_main2">Main2Activity</string>
-
-
     <string name="titre">Choice of character</string>
     <string name="linuxName">Pro linux</string>
     <string name="linuxDesc">The pro linux guy will torment his ennemis with his totally very complicated explication on why linux is the best</string>
     <string name="pyjName">The little boy with mic</string>
 
+    <string name="strp1">Strength : 50</string>
+    <string name="magp1">Mana : 50</string>
+    <string name="viep1">HP : 16</string>
+    <string name="defp1">Defense : 42</string>
+    <string name="strp2">Strength : 25</string>
+    <string name="magp2">Mana : 55</string>
+    <string name="viep2">HP : 25</string>
+    <string name="defp2">Defense : 45</string>
+
     <string name="pyjDesc">This boy will use his voice mixed with the poxer of a shitty microphone bought by his mother at walmart in order to make damage to the ears of his ennemies</string>
-    <string name="title_activity_login">Sign in</string>
-
-    <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
 
+    <string name="str_stat">Strength : </string>
+    <string name="mag_stat">Mana : </string>
+    <string name="vie_stat">HP : </string>
+    <string name="def_stat">Defense : </string>
 
+    <string name="niveau">  Level : </string>
+    <string name="stat_window">Stat window</string>
+
+    <string name="lab">The maze</string>
+    <string name="enter_game">Get in the game</string>
+    <string name="continuer">Continue</string>
+    <string name="retour">Return</string>
 </resources>

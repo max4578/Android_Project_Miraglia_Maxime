@@ -1,10 +1,12 @@
 package com.example.maxim.test03;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -16,9 +18,7 @@ import android.widget.TextView;
 
 public class Ecran_Jeu extends AppCompatActivity {
 
-    /*Info a passer sur la page suivante*/
-    private String nomC;
-    private int ressource;
+
 
     /*Element XML a utilisé en global*/
     TextView tvLvl,tvForce,tvMagie,tvPv,tvDef;
@@ -31,40 +31,15 @@ public class Ecran_Jeu extends AppCompatActivity {
    /*Déclaration des différent tablelayuot*/
     TableLayout tab,tabStat,tabPot;
 
-   /*schéma de la map*/
-   private int table[][] = {
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-           {1,1,1,1,2,2,2,2,2,2,1,1,1,1,1},
-           {1,1,1,1,2,2,2,1,2,2,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-           {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+     /*schéma de la map*/
+     private int table[][]=null;
 
-    /*Valeur permettant de gerer la zone de départ et le déplacement du personnage*/
-    private int x;
-    private int y;
-    private int hd=0;
-    private int vd=0;
+     Personnage p;
 
-    /*Statistique du personnage*/
-    private int force;
-    private int magie;
-    private int pv;
-    private int def;
-    private int gemme;
-    private int niveau;
-    private int skillPoint;
 
-    /*Nombre de potions du personnages*/
-    private int nbrPotForce;
-   private int nbrPotRouge;
-   private int nbrPotBleue;
+
+    Resources res;
+    int java_size_text;
 
 
 
@@ -72,102 +47,46 @@ public class Ecran_Jeu extends AppCompatActivity {
 
 
 
-
-
-
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-         /*Sauvegarde des valeurs dans le Bundle*/
-        bundle.putInt("Force",force);
-        bundle.putInt("Magie",magie);
-        bundle.putInt("Defense",def);
-        bundle.putInt("PV",pv);
-        bundle.putInt("Niveau",niveau);
-        bundle.putInt("pForce",nbrPotForce);
-        bundle.putInt("pRouge",nbrPotRouge);
-        bundle.putInt("pBleue",nbrPotBleue);
-        bundle.putInt("SkillPoint",skillPoint);
-        bundle.putSerializable("table",table);
-        bundle.putInt("posX",x);
-        bundle.putInt("posY",y);
-        bundle.putInt("hd",hd);
-        bundle.putInt("vd",vd);
-        bundle.putInt("gemme",gemme);
-    }
-
-
     @Override
      protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_main2);
+                super.onCreate(bundle);
+        setContentView(R.layout.ecran_jeu);
+        TacheAsync_map as= new TacheAsync_map();
+        try{
+            as.execute().get();
+        }catch(InterruptedException e){
+
+        }catch(ExecutionException e){
+
+        }
+        res = getResources();
+        java_size_text= res.getInteger(R.integer.java_generated_text);
+
         i=getIntent();
+        table=as.getTable();
+        for(int i=0;i<table.length;i++){
+
+            for(int j=0;j<table[i].length;j++){
+                System.out.print(table[i][j]);
+            }
+            System.out.println();
+        }
+        /*Si le bundle est vides les informations sont soit initialisé par défaut au vaeurs choisie, soit récupèrer depuis l' intent*/
         if(bundle!=null) {
-            force=bundle.getInt("Force");
-            magie=bundle.getInt("Magie");
-            def=bundle.getInt("Defense");
-            pv=bundle.getInt("PV");
-            niveau = bundle.getInt("Niveau");
-            nbrPotForce=bundle.getInt("pForce");
-            nbrPotBleue=bundle.getInt("pBleue");
-            nbrPotRouge=bundle.getInt("pRouge");
-            skillPoint=bundle.getInt("SkillPoint");
-            table=(int[][])bundle.getSerializable("table");
-            x=bundle.getInt("posX");
-            y=bundle.getInt("posY");
-            hd=bundle.getInt("hd");
-            vd=bundle.getInt("vd");
-            gemme=bundle.getInt("gemme");
+           retrieveBundle(bundle);
 
         } else {
-            nomC = i.getStringExtra("NomClasse");
-            ressource = i.getIntExtra("ressource", R.drawable.knight);
-            force = i.getIntExtra("Force", 0);
-            magie = i.getIntExtra("Magie", 0);
-            def = i.getIntExtra("Defense", 0);
-            pv = i.getIntExtra("PV", 0);
-            niveau = i.getIntExtra("Niveau", 1);
-            nbrPotForce = i.getIntExtra("pForce", 2);
-            nbrPotRouge = i.getIntExtra("pRouge", 2);
-            nbrPotBleue = i.getIntExtra("pBleue", 2);
-            skillPoint=i.getIntExtra("SkillPoint",0);
-
-
-           // table=(int[][])i.getSerializableExtra("table");
-            x=i.getIntExtra("posX",7);
-            y=i.getIntExtra("posY",6);
-            hd=i.getIntExtra("hd",0);
-            vd=i.getIntExtra("vd",0);
-            gemme=i.getIntExtra("gemme",0);
-             /*Boucle permettant de generer des gemmes aléatoirement sur la carte*/
-            int cpt=0;
-            Random rand;
-            for(int k=0; k <11; k++) {
-                for (int j = 0; j < table[k].length; j++) {
-                    rand= new Random();
-                    int n = rand.nextInt(100) + 1;
-                    if (table[k][j] == 2 && cpt < 3) {
-                        if (n> 42) {
-                            table[k][j] = 4;
-                            cpt++;
-                        }
-                    }
-                }
-            }
+           retrieveIntent();
+           generateGem();
         }
-
-
-
-
-
 
         /*Initialise les TL des potions et des statistiques*/
         InitPot();
         InitStat();
 
-
-       /*Récupération des informations concernant les boutons*/
+        /*Récupération des informations concernant les boutons*/
         butPot= (ImageButton)findViewById(R.id.BtnPotion);
+        //butPot.setVisibility(View.INVISIBLE);
         ImageButton butBas= (ImageButton)findViewById(R.id.bas);
         ImageButton butHaut= (ImageButton)findViewById(R.id.haut);
         ImageButton butGauche= (ImageButton)findViewById(R.id.gauche);
@@ -178,46 +97,107 @@ public class Ecran_Jeu extends AppCompatActivity {
         butHaut.setOnClickListener(listenerBtHaut);
         butGauche.setOnClickListener(listenerBtGauche);
         butDroite.setOnClickListener(listenerBtDroite);
-        /*Methode permettant de generer la map du jeu*/
-        table[y][x]=0;
-        UpdateMap(R.drawable.link_bas01);
+
+
+        table[p.getY()][p.getX()]=0;
+        UpdateMap(p.getDirection());
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+         /*Sauvegarde des valeurs dans le Bundle*/
+
+        bundle.putSerializable("personnage", p);
+        bundle.putSerializable("table", table);
+    }
+
+
+    public void retrieveBundle(Bundle bundle){
+
+        p=(Personnage)bundle.getSerializable("personnage");
+        table=(int[][])bundle.getSerializable("table");
+    }
+
+    public void retrieveIntent(){
+        //nomC = i.getStringExtra("NomClasse");
+        //  ressource = i.getIntExtra("ressource", R.drawable.knight);
+        if(i.getSerializableExtra("personnage")==null) {
+            int force = i.getIntExtra("Force", 0);
+            int magie = i.getIntExtra("Magie", 0);
+            int def = i.getIntExtra("Defense", 0);
+            int pv = i.getIntExtra("PV", 0);
+            int niveau = i.getIntExtra("Niveau", 1);
+            int nbrPotForce = i.getIntExtra("pForce", 2);
+            int nbrPotRouge = i.getIntExtra("pRouge", 2);
+            int nbrPotBleue = i.getIntExtra("pBleue", 2);
+            int skillPoint = i.getIntExtra("SkillPoint", 0);
+            int x = i.getIntExtra("posX", 7);
+            int y = i.getIntExtra("posY", 5);
+            int hd = i.getIntExtra("hd", 0);
+            int vd = i.getIntExtra("vd", 0);
+            int gemme = i.getIntExtra("gemme", 0);
+
+            p = new Personnage(x, y, hd, vd, force, magie, def, pv, gemme, niveau, skillPoint, nbrPotForce, nbrPotRouge, nbrPotBleue,R.drawable.link_bas01);
+        }
+        else
+            p=(Personnage) i.getSerializableExtra("personnage");
+    }
+
+    public void generateGem(){
+        /*Boucle permettant de generer des gemmes aléatoirement sur la carte*/
+        int cpt=0;
+        Random rand;
+        for(int k=0; k <11; k++) {
+            for (int j = 0; j < table[k].length; j++) {
+                rand= new Random();
+                int n = rand.nextInt(100) + 1;
+                if (table[k][j] == 2 && cpt < 3) {
+                    if (n> 42) {
+                        table[k][j] = 4;
+                        cpt++;
+                    }
+                }
+            }
+        }
+
+    }
+
+
 
     /*Methode qui initialise le TL des potions*/
     public void InitPot(){
-             /*Initialisation du layout*/
-            tabPot = (TableLayout) findViewById(R.id.tabPot);
-            /* Initialisation et affichage de la potion de force*/
-            trPotForce= new TableRow(this);
-            potForce= new ImageButton(this);
-            cptForce= new TextView(this);
-            potForce.setBackgroundResource(R.drawable.s_pot);
-            trPotForce.addView(potForce);
-            potForce.getLayoutParams().width = 55;
-            potForce.getLayoutParams().height = 55;
-            cptForce.setText("x"+nbrPotForce);
-             /* Initialisation et affichage de la potion rouge*/
-            trPotForce.addView(cptForce);
-            trPotRouge= new TableRow(this);
-            potRouge= new ImageButton(this);
-            cptRouge= new TextView(this);
-            potRouge.setBackgroundResource(R.drawable.red_pot);
-            trPotRouge.addView(potRouge);
-            potRouge.getLayoutParams().width = 55;
-            potRouge.getLayoutParams().height = 55;
-            cptRouge.setText("x"+nbrPotRouge);
-            trPotRouge.addView(cptRouge);
-             /* Initialisation et affichage de la potion de bleue*/
-            trPotBleue= new TableRow(this);
-            potBleue= new ImageButton(this);
-            cptBleue= new TextView(this);
-            potBleue.setBackgroundResource(R.drawable.blue_pot);
-            trPotBleue.addView(potBleue);
-           potBleue.getLayoutParams().width = 55;
-            potBleue.getLayoutParams().height = 55;
-            cptBleue.setText("x"+nbrPotBleue);
-            trPotBleue.addView(cptBleue);
-            /*Initialisation des listener pour les potions*/
+        /*Initialisation du layout*/
+        tabPot = (TableLayout) findViewById(R.id.tabPot);
+        /* Initialisation et affichage de la potion de force*/
+        trPotForce= new TableRow(this);
+        potForce= new ImageButton(this);
+        cptForce= new TextView(this);
+        potForce.setBackgroundResource(R.drawable.s_pot);
+        trPotForce.addView(potForce);
+        cptForce.setText("x"+p.getNbrPotForce());
+        trPotForce.addView(cptForce);
+        cptForce.setTextSize(java_size_text);
+        /* Initialisation et affichage de la potion rouge*/
+        trPotRouge= new TableRow(this);
+        potRouge= new ImageButton(this);
+        cptRouge= new TextView(this);
+        potRouge.setBackgroundResource(R.drawable.red_pot);
+        trPotRouge.addView(potRouge);
+        cptRouge.setText("x"+p.getNbrPotRouge());
+        trPotRouge.addView(cptRouge);
+        cptRouge.setTextSize(java_size_text);
+        /* Initialisation et affichage de la potion de bleue*/
+        trPotBleue= new TableRow(this);
+        potBleue= new ImageButton(this);
+        cptBleue= new TextView(this);
+        potBleue.setBackgroundResource(R.drawable.blue_pot);
+        trPotBleue.addView(potBleue);
+        cptBleue.setText("x"+p.getNbrPotBleue());
+        trPotBleue.addView(cptBleue);
+        cptBleue.setTextSize(java_size_text);
+
+        /*Initialisation des listener pour les potions*/
         potForce.setOnClickListener(listenerBtForce);
         potRouge.setOnClickListener(listenerBtRouge);
         potBleue.setOnClickListener(listenerBtBleue);
@@ -237,25 +217,31 @@ public class Ecran_Jeu extends AppCompatActivity {
         tvDef= new TextView(this);
 
         tabStat = (TableLayout) findViewById(R.id.stat);
-        tvLvl.setText("Niveau:"+niveau);
+        tvLvl.setText(res.getString(R.string.niveau)+p.getNiveau());
+        tvLvl.setTextSize(java_size_text);
         tr.addView(tvLvl);
         tabStat.addView(tr);
+
         tr= new TableRow(this);
-        tvForce.setText("Force:"+force);
+        tvForce.setText(res.getString(R.string.str_stat)+p.getForce());
         tr.addView(tvForce);
         tabStat.addView(tr);
+        tvForce.setTextSize(java_size_text);
         tr= new TableRow(this);
-        tvMagie.setText("Magie:"+magie);
+        tvMagie.setText(res.getString(R.string.mag_stat)+p.getMagie());
         tr.addView(tvMagie);
         tabStat.addView(tr);
+        tvMagie.setTextSize(java_size_text);
         tr= new TableRow(this);
-        tvPv.setText("PV:"+pv);
+        tvPv.setText(res.getString(R.string.vie_stat)+p.getPv());
         tr.addView(tvPv);
         tabStat.addView(tr);
+        tvPv.setTextSize(java_size_text);
         tr= new TableRow(this);
-        tvDef.setText("Def:"+def);
+        tvDef.setText(res.getString(R.string.def_stat)+p.getDef());
         tr.addView(tvDef);
         tabStat.addView(tr);
+        tvDef.setTextSize(java_size_text);
     }
 
     /*Met a jour le TL des potions*/
@@ -263,54 +249,44 @@ public class Ecran_Jeu extends AppCompatActivity {
 
     /*Methode qui generera la carte dans le TL*/
     public void UpdateMap(int res){
-       if(gemme==3){
-            niveau++;
-            skillPoint++;
-            gemme=0;
-            tvLvl.setText("Niveau: "+niveau);
+       if(p.getGemme()==3){
+            p.setNiveau(p.getNiveau()+1);
+            p.setSkillPoint(p.getSkillPoint()+1);
+            p.setGemme(0);
+            tvLvl.setText("Niveau: "+p.getNiveau());
         }
         /*Initialisation du layout*/
         tab = (TableLayout) findViewById(R.id.lab);
         /*Declaration d' un TR et IV qui seront reinitialisé à la volée*/
         TableRow tr;
         ImageView img;
-        for(int i=3+vd;i<9+vd;i++) {
+        for(int i=3+p.getVd();i<9+p.getVd();i++) {
             tr = new TableRow(this);
             tab.addView(tr);
-            for (int j = 3+hd; j < 11+hd; j++) {
+            for (int j = 3+p.getHd(); j < 11+p.getHd(); j++) {
                 imgPers= new ImageButton(this);//ImageButton du personnage
                 img = new ImageView(this);
                 switch (table[i][j]) {
                     case 0:
                         imgPers.setBackgroundResource(res);
                         tr.addView(imgPers);
-                        imgPers.getLayoutParams().width = 80;
-                        imgPers.getLayoutParams().height = 80;
                         imgPers.setOnClickListener(fenetreStat);
                         break;
                     case 1:
-                        img.setImageResource(R.drawable.tile_rocher);
+                        img.setBackgroundResource(R.drawable.tile_rocher);
                         tr.addView(img);
-                        img.getLayoutParams().width = 80;
-                        img.getLayoutParams().height = 80;
                         break;
                     case 2:
-                        img.setImageResource(R.drawable.tile_chemin);
+                        img.setBackgroundResource(R.drawable.tile_chemin);
                         tr.addView(img);
-                        img.getLayoutParams().width = 80;
-                        img.getLayoutParams().height = 80;
                         break;
                     case 3:
-                        img.setImageResource(R.drawable.tile_arbre);
+                        img.setBackgroundResource(R.drawable.tile_arbre);
                         tr.addView(img);
-                        img.getLayoutParams().width = 80;
-                        img.getLayoutParams().height = 80;
                         break;
                     case 4:
                         img.setImageResource(R.drawable.pearl_tile);
                         tr.addView(img);
-                        img.getLayoutParams().width = 80;
-                        img.getLayoutParams().height = 80;
                         break;
                 }
 
@@ -330,20 +306,7 @@ public class Ecran_Jeu extends AppCompatActivity {
 
             Intent intent = new Intent(Ecran_Jeu.this,Ecran_Statistique.class);
             intent.putExtras(i);
-            intent.putExtra("Niveau",niveau);
-            intent.putExtra("SkillPoint", skillPoint);
-            intent.putExtra("pRouge", nbrPotRouge);
-            intent.putExtra("pForce", nbrPotForce);
-            intent.putExtra("pBleue", nbrPotBleue);
-            intent.putExtra("posX",x);
-            intent.putExtra("posY",y);
-            intent.putExtra("hd",hd);
-            intent.putExtra("vd",vd);
-            intent.putExtra("gemme",gemme);
-            intent.putExtra("Force", force);
-            intent.putExtra("PV", pv);
-            intent.putExtra("Magie",magie);
-            intent.putExtra("Defense",def);
+            intent.putExtra("personnage",p);
            // intent.putExtra("table",table);
             startActivity(intent);
 
@@ -356,18 +319,19 @@ public class Ecran_Jeu extends AppCompatActivity {
         @Override
         public void onClick(View v){
             tab.removeAllViews();
-            if(table[y+1][x]==4){
-                table[y][x]=2;
-                y++;
-                table[y][x]=0;
-                vd++;
-                gemme++;
-            }else if(table[y+1][x]==2){
-                table[y][x]=2;
-                y++;
-                table[y][x]=0;
-                vd++;
+            if(table[p.getY()+1][p.getX()]==4){
+                table[p.getY()][p.getX()]=2;
+                p.setY(p.getY()+1);
+                table[p.getY()][p.getX()]=0;
+                p.setVd(p.getVd()+1);
+                p.setGemme(p.getGemme()+1);
+            }else if(table[p.getY()+1][p.getX()]==2){
+                table[p.getY()][p.getX()]=2;
+                p.setY(p.getY()+1);
+                table[p.getY()][p.getX()]=0;
+                p.setVd(p.getVd()+1);
             }
+            p.setDirection(R.drawable.link_bas01);
             UpdateMap(R.drawable.link_bas01);
 
 
@@ -379,18 +343,19 @@ public class Ecran_Jeu extends AppCompatActivity {
         @Override
         public void onClick(View v){
             tab.removeAllViews();
-            if(table[y-1][x]==4){
-                table[y][x]=2;
-                y--;
-                table[y][x]=0;
-                vd--;
-                gemme++;
-            }else if(table[y-1][x]==2){
-                table[y][x]=2;
-                y--;
-                table[y][x]=0;
-                vd--;
+            if(table[p.getY()-1][p.getX()]==4){
+                table[p.getY()][p.getX()]=2;
+                p.setY(p.getY()-1);
+                table[p.getY()][p.getX()]=0;
+                p.setVd(p.getVd()-1);
+                p.setGemme(p.getGemme()+1);
+            }else if(table[p.getY()-1][p.getX()]==2){
+                table[p.getY()][p.getX()]=2;
+                p.setY(p.getY()-1);
+                table[p.getY()][p.getX()]=0;
+                p.setVd(p.getVd()-1);
             }
+            p.setDirection(R.drawable.link_haut01);
             UpdateMap(R.drawable.link_haut01);
 
 
@@ -402,20 +367,20 @@ public class Ecran_Jeu extends AppCompatActivity {
         @Override
         public void onClick(View v){
             tab.removeAllViews();
-            if(table[y][x-1]==4){
-                table[y][x]=2;
-                x--;
-                table[y][x]=0;
-                hd--;
-                gemme++;
-            }else if(table[y][x-1]==2){
-                table[y][x]=2;
-                x--;
-                table[y][x]=0;
-                hd--;
+            if(table[p.getY()][p.getX()-1]==4){
+                table[p.getY()][p.getX()]=2;
+                p.setX(p.getX()-1);
+                table[p.getY()][p.getX()]=0;
+                p.setHd(p.getHd()-1);
+                p.setGemme(p.getGemme()+1);
+            }else if(table[p.getY()][p.getX()-1]==2){
+                table[p.getY()][p.getX()]=2;
+                p.setX(p.getX()-1);
+                table[p.getY()][p.getX()]=0;
+                p.setHd(p.getHd()-1);
             }
-
-                UpdateMap(R.drawable.link_gauche01);
+            p.setDirection(R.drawable.link_gauche01);
+            UpdateMap(R.drawable.link_gauche01);
 
 
         }
@@ -428,19 +393,20 @@ public class Ecran_Jeu extends AppCompatActivity {
         @Override
         public void onClick(View v){
             tab.removeAllViews();
-            if(table[y][x+1]==4){
-                table[y][x]=2;
-                x++;
-                table[y][x]=0;
-                hd++;
-                gemme++;
-            }else if(table[y][x+1]==2){
-                table[y][x]=2;
-                x++;
-                table[y][x]=0;
-                hd++;
+            if(table[p.getY()][p.getX()+1]==4){
+                table[p.getY()][p.getX()]=2;
+                p.setX(p.getX()+1);
+                table[p.getY()][p.getX()]=0;
+                p.setHd(p.getHd()+1);
+                p.setGemme(p.getGemme()+1);
+            }else if(table[p.getY()][p.getX()+1]==2){
+                table[p.getY()][p.getX()]=2;
+                p.setX(p.getX()+1);
+                table[p.getY()][p.getX()]=0;
+                p.setHd(p.getHd()+1);
             }
-                UpdateMap(R.drawable.link_droite01);
+            p.setDirection(R.drawable.link_droite01);
+            UpdateMap(R.drawable.link_droite01);
 
         }
     };
@@ -465,11 +431,11 @@ public class Ecran_Jeu extends AppCompatActivity {
     {
         @Override
         public void onClick(View v){
-            if(nbrPotForce>0){
-                force+=10;
-                nbrPotForce--;
-                cptForce.setText("x"+nbrPotForce);
-                tvForce.setText("Force: "+ force);
+            if(p.getNbrPotForce()>0){
+                p.setForce(p.getForce()+10);
+                p.setNbrPotForce(p.getNbrPotForce()-1);
+                cptForce.setText("x"+p.getNbrPotForce());
+                tvForce.setText(res.getString(R.string.str_stat)+ p.getForce());
             }
 
         }
@@ -479,11 +445,11 @@ public class Ecran_Jeu extends AppCompatActivity {
     {
         @Override
         public void onClick(View v){
-            if(nbrPotRouge>0){
-                pv+=10;
-                nbrPotRouge--;
-                cptRouge.setText("x"+nbrPotRouge);
-                tvPv.setText("Pv: "+ pv);
+            if(p.getNbrPotRouge()>0){
+                p.setPv(p.getPv()+10);
+                p.setNbrPotRouge(p.getNbrPotRouge()-1);
+                cptRouge.setText("x"+p.getNbrPotRouge());
+                tvPv.setText(res.getString(R.string.vie_stat)+ p.getPv());
             }
 
         }
@@ -494,11 +460,11 @@ public class Ecran_Jeu extends AppCompatActivity {
     {
         @Override
         public void onClick(View v){
-            if(nbrPotBleue >0){
-                magie+=10;
-                nbrPotBleue --;
-                cptBleue.setText("x"+nbrPotBleue);
-                tvMagie.setText("Magie: "+ magie);
+            if(p.getNbrPotBleue()>0){
+                p.setMagie(p.getMagie()+10);
+                p.setNbrPotBleue(p.getNbrPotBleue()-1);
+                cptBleue.setText("x"+p.getNbrPotBleue());
+                tvMagie.setText(res.getString(R.string.mag_stat)+ p.getMagie());
             }
 
         }
